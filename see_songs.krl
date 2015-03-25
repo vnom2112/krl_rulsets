@@ -24,7 +24,7 @@ Song ruleset
   }
   
   rule find_hymn is active {
-    select when explicit sung song re#\bgod\bi#
+    select when explicit sung song re#/god/i#
     always {
       raise explicit event 'found_hymn'
     }
