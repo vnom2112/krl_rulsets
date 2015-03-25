@@ -14,9 +14,20 @@ Song ruleset
   }
   
   rule songs is active {
-    select when echo message msg_type re#song#
+    select when echo message input "(.*)" setting(m)
     send_directive("sing") with
-      song = "This is a song";
+    song = m;
+    always {
+      raise explicit event sung
+      with song = m
+    }
+  }
+  
+  rule find_hymn is active {
+    select when explicit sung song re#god#
+    always {
+      raise explicit event found_hymn
+    }
   }
  
 }
