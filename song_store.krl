@@ -7,7 +7,7 @@ All the songs that have been sung
     author "Brady Kelley"
     logging on
     sharing on
-    provides hymns, secular_music
+    provides songs, hymns, secular_music
   }
   global {
     songs = function(x) {
