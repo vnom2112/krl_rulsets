@@ -14,9 +14,9 @@ Song ruleset
   }
   
   rule songs is active {
-    select when echo message msg_type "(.*)" setting(m)
+    select when echo message msg_type re#song#
     send_directive("sing") with
-      song = m;
+      song = "This is a song";
   }
  
 }
