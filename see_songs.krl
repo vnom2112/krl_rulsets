@@ -26,7 +26,7 @@ Song ruleset
   rule find_secular is active {
     select when explicit sung song re#^(.(?!god))*$#i
     fired {
-      raise explicit event 'found_hymn'
+      raise explicit event 'found_secular'
       with song = event:attr('song');
     }
   }
