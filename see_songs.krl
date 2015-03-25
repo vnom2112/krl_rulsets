@@ -24,13 +24,14 @@ Song ruleset
   }
   
   rule find_hymn is active {
-    select when explicit sung song re#god#
-    fired {
+    select when explicit sung
+    always {
       raise explicit event 'found_hymn'
-      with song = currentSong;
-    } else {
+      with song = event:attr('song')
+      if(song.match(re/god/i));
       raise explicit event 'found_secular'
-      with song = currentSong;
+      with song = event:attr('song')
+      if(not song.match(re/god/i));
     }
   }
   
