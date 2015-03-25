@@ -1,54 +1,66 @@
-ruleset see_song {
+ruleset song_store {
   meta {
-    name "See Songs"
+    name "Song Store"
     description <<
-Song ruleset
+All the songs that have been sung
 >>
     author "Brady Kelley"
     logging on
     sharing on
- 
+    provides songs, hymns, secular_music
   }
   global {
- 
-  }
-  
-  rule songs is active {
-    select when echo message msg_type re/^song$/ input "(.*)" setting(m)
-    send_directive("sing") with
-    song = m;
-    always {
-      raise explicit event 'sung'
-      with song = m
+    songs = function(x) {
+      ent:all_songs
+    }
+    hymns = function(x) {
+      ent:hymns
+    }
+    secular_music = function(x) {
+      ent:secular
     }
   }
   
-  rule find_hymn is active {
-    select when explicit sung re/god/i
+  rule collect_songs is active {
+    select when explicit sung
+    pre {
+      currentSongs = ent:all_songs || [];
+      newSongs = currentSongs.union(time:now() + '-' + event:attr("song"));
+    }
     always {
-      raise explicit event 'found_hymn'
-      with song = event:attr('song')
+      set ent:all_songs newSongs;
+    }
+  }
+  
+  rule collect_hymns is active {
+    select when explicit found_hymn
+    pre {
+      currentHymns = ent:hymns || [];
+      newHymns = currentHymns.union(time:now() + '-' + event:attr("song"));
+    }
+    always {
+      set ent:hymns newHymns;
     }
   }
 
-  rule find_secular is active {
-    select when explicit sung re/^(.(?!god))*$/i
+  rule collect_secular is active {
+    select when explicit found_secular
+    pre {
+      currentSecular = ent:secular || [];
+      newSecular = currentSecular.union(time:now() + '-' + event:attr("song"));
+    }
     always {
-      raise explicit event 'found_secular'
-      with song = event:attr('song')
+      set ent:secular newSecular;
     }
   }
-  
-  rule foundHymn is active {
-    select when explicit found_hymn
-    send_directive("found")
-    with song = "Found a Hymn!";
-  }
-  
-  rule foundSecular is active {
-    select when explicit found_secular
-    send_directive("found")
-    with song = "Found a Secular Song!";
+
+  rule clear_songs is active {
+    select when song reset
+    always {
+      clear ent:all_songs;
+      clear ent:hymns;
+      clear ent:secular;
+    }
   }
  
 }
