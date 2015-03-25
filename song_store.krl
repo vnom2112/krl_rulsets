@@ -6,7 +6,7 @@ All the songs that have been sung
 >>
     author "Brady Kelley"
     logging on
-    sharing on
+    sharing off
     provides songs, hymns, secular_music
   }
   global {
