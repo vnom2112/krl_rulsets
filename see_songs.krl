@@ -25,15 +25,25 @@ Song ruleset
   
   rule find_hymn is active {
     select when explicit sung song re#god#
-    always {
+    fired {
       raise explicit event 'found_hymn'
+      with song = currentSong;
+    } else {
+      raise explicit event 'found_secular'
+      with song = currentSong;
     }
   }
   
-  rule found is active {
+  rule foundHymn is active {
     select when explicit found_hymn
     send_directive("found")
-    with song = "Found it!";
+    with song = "Found a Hymn!";
+  }
+  
+  rule foundSecular is active {
+    select when explicit found_secular
+    send_directive("found")
+    with song = "Found a Secular Song!";
   }
  
 }
