@@ -28,7 +28,7 @@ Song ruleset
     always {
       raise explicit event 'found_hymn'
       with song = event:attr('song')
-      if(event:attr('song').match(re#god#));
+      if(event:attr('song').match(re/god/i));
     }
   }
 
@@ -37,7 +37,7 @@ Song ruleset
     always {
       raise explicit event 'found_secular'
       with song = event:attr('song')
-      if(not event:attr('song').match(re#god#));
+      if(not event:attr('song').match(re/god/i));
     }
   }
   
