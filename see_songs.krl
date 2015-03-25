@@ -14,7 +14,7 @@ Song ruleset
   }
   
   rule songs is active {
-    select when echo message input "(.*)" setting(m)
+    select when echo message msg_type re/^song$/ input "(.*)" setting(m)
     send_directive("sing") with
     song = m;
     always {
@@ -23,14 +23,18 @@ Song ruleset
     }
   }
   
-  rule find_hymn is active {
-    select when explicit sung re/god/i
+  rule find_secular is active {
+    select when explicit sung song re#^(.(?!god))*$#i
     fired {
       raise explicit event 'found_hymn'
       with song = event:attr('song');
     }
-    else {
-      raise explicit event 'found_secular'
+  }
+  
+  rule find_hymn is active {
+    select when explicit sung song re#god#i
+    fired {
+      raise explicit event 'found_hymn'
       with song = event:attr('song');
     }
   }
