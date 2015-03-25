@@ -18,7 +18,7 @@ Song ruleset
     send_directive("sing") with
     song = m;
     always {
-      raise explicit event sung
+      raise explicit event 'sung'
       with song = m
     }
   }
@@ -26,7 +26,7 @@ Song ruleset
   rule find_hymn is active {
     select when explicit sung song re#god#
     always {
-      raise explicit event found_hymn
+      raise explicit event 'found_hymn'
     }
   }
  
