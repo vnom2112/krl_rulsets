@@ -29,5 +29,11 @@ Song ruleset
       raise explicit event 'found_hymn'
     }
   }
+  
+  rule found is active {
+    select when explicit found_hymn
+    send_directive("found")
+    with song = "Found it!";
+  }
  
 }
