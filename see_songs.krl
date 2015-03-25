@@ -24,9 +24,10 @@ Song ruleset
   }
   
   rule find_hymn is active {
-    select when explicit sung song re/god/
+    select when explicit sung where song setting(song_title)
     always {
       raise explicit event 'found_hymn'
+      if(song_title.match(re/god/i));
     }
   }
   
